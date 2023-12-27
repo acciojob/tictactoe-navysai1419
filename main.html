@@ -55,44 +55,51 @@
                 message.textContent = `${player1Name}, you're up`;
 
                 // Attach click event to each cell
-                document.querySelectorAll('.cell').forEach(cell => {
-                    cell.addEventListener('click', handleCellClick);
-                });
+               document.querySelectorAll('.cell').forEach(cell => {
+              cell.addEventListener('click', handleCellClick);
+    });
             });
 
-            function handleCellClick(event) {
-                const cellIndex = event.target.id - 1;
+             function handleCellClick(event) {
+        const cellIndex = event.target.id - 1;
 
-                if (boardState[cellIndex] === '' && gameActive) {
-                    const symbol = currentPlayer === 1 ? 'X' : 'O';
-                    boardState[cellIndex] = symbol;
-                    event.target.textContent = symbol;
+        if (boardState[cellIndex] === '' && gameActive) {
+            const symbol = currentPlayer === 1 ? 'X' : 'O';
+            boardState[cellIndex] = symbol;
+            event.target.textContent = symbol;
 
-                    if (checkWin()) {
-                        message.textContent = `${currentPlayer === 1 ? player1Name : player2Name}, congratulations you won!`;
-                        gameActive = false;
-                    } else if (boardState.every(cell => cell !== '')) {
-                        message.textContent = 'It\'s a tie!';
-                        gameActive = false;
-                    } else {
-                        currentPlayer = 3 - currentPlayer; // Switch player (1 <-> 2)
-                        message.textContent = `${currentPlayer === 1 ? player1Name : player2Name}, you're up`;
-                    }
-                }
+            if (checkWin()) {
+                message.textContent = `${currentPlayer === 1 ? player1Name : player2Name}, congratulations you won!`;
+                gameActive = false;
+            } else if (boardState.every(cell => cell !== '')) {
+                message.textContent = 'It\'s a tie!';
+                gameActive = false;
+            } else {
+                currentPlayer = 3 - currentPlayer; // Switch player (1 <-> 2)
+                message.textContent = `${currentPlayer === 1 ? player1Name : player2Name}, you're up`;
             }
+        }
+    }
 
-            function checkWin() {
-                const winPatterns = [
-                    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-                    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-                    [0, 4, 8], [2, 4, 6]             // Diagonals
-                ];
 
-                return winPatterns.some(pattern => {
-                    const [a, b, c] = pattern;
-                    return boardState[a] !== '' && boardState[a] === boardState[b] && boardState[b] === boardState[c];
-                });
-            }
+function checkWin() {
+    const winPatterns = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+        [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
+
+    for (const pattern of winPatterns) {
+        const [a, b, c] = pattern;
+        if (boardState[a] !== '' && boardState[a] === boardState[b] && boardState[b] === boardState[c]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
         });
     </script>
 </head>
