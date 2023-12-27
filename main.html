@@ -40,8 +40,8 @@
             let gameActive = true;
 
             submitBtn.addEventListener('click', function () {
-                player1Name = document.getElementById('player-1').value;
-                player2Name = document.getElementById('player-2').value;
+                player1Name = document.getElementById('player1').value;
+                player2Name = document.getElementById('player2').value;
 
                 // Validate names
                 if (!player1Name || !player2Name) {
@@ -99,8 +99,8 @@
 <body>
     <div class="container" id="nameInput">
         <h1>Tic Tac Toe</h1>
-        <input type="text" id="player-1" placeholder="Player 1">
-        <input type="text" id="player-2" placeholder="Player 2">
+        <input type="text" id="player1" placeholder="Player 1">
+        <input type="text" id="player2" placeholder="Player 2">
         <button id="submit">Submit</button>
     </div>
 
