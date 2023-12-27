@@ -1,29 +1,121 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .container {
+            text-align: center;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #333;
+            font-size: 2em;
+            cursor: pointer;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.querySelector('.container');
+            const submitBtn = document.getElementById('submit');
+            const board = document.getElementById('board');
+            const message = document.querySelector('.message');
+            let currentPlayer = 1;
+            let player1Name, player2Name;
+            let boardState = ['', '', '', '', '', '', '', '', ''];
+            let gameActive = true;
+
+            submitBtn.addEventListener('click', function () {
+                player1Name = document.getElementById('player-1').value;
+                player2Name = document.getElementById('player-2').value;
+
+                // Validate names
+                if (!player1Name || !player2Name) {
+                    alert('Please enter names for both players.');
+                    return;
+                }
+
+                // Hide input elements and display the board
+                document.getElementById('nameInput').style.display = 'none';
+                board.style.display = 'grid';
+                message.textContent = `${player1Name}, you're up`;
+
+                // Attach click event to each cell
+                document.querySelectorAll('.cell').forEach(cell => {
+                    cell.addEventListener('click', handleCellClick);
+                });
+            });
+
+            function handleCellClick(event) {
+                const cellIndex = event.target.id - 1;
+
+                if (boardState[cellIndex] === '' && gameActive) {
+                    const symbol = currentPlayer === 1 ? 'X' : 'O';
+                    boardState[cellIndex] = symbol;
+                    event.target.textContent = symbol;
+
+                    if (checkWin()) {
+                        message.textContent = `${currentPlayer === 1 ? player1Name : player2Name}, congratulations you won!`;
+                        gameActive = false;
+                    } else if (boardState.every(cell => cell !== '')) {
+                        message.textContent = 'It\'s a tie!';
+                        gameActive = false;
+                    } else {
+                        currentPlayer = 3 - currentPlayer; // Switch player (1 <-> 2)
+                        message.textContent = `${currentPlayer === 1 ? player1Name : player2Name}, you're up`;
+                    }
+                }
+            }
+
+            function checkWin() {
+                const winPatterns = [
+                    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                    [0, 4, 8], [2, 4, 6]             // Diagonals
+                ];
+
+                return winPatterns.some(pattern => {
+                    const [a, b, c] = pattern;
+                    return boardState[a] !== '' && boardState[a] === boardState[b] && boardState[b] === boardState[c];
+                });
+            }
+        });
+    </script>
 </head>
-
 <body>
-	<div class="container">
-  <div id="players">
-    <label for="player1">Player 1 Name: </label>
-    <input type="text" id="player1">
-    <label for="player2">Player 2 Name: </label>
-    <input type="text" id="player2">
-    <button id="submit" onclick="startGame()">Submit</button>
-  </div>
+    <div class="container" id="nameInput">
+        <h1>Tic Tac Toe</h1>
+        <input type="text" id="player-1" placeholder="Player 1">
+        <input type="text" id="player-2" placeholder="Player 2">
+        <button id="submit">Submit</button>
+    </div>
 
-  <h1>Tic Tac Toe</h1>
-  <div class="message"></div>
-  <div id="board"></div>
-</div>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
-
+    <div class="container" id="board" style="display: none;">
+        <h1>Tic Tac Toe</h1>
+        <div class="message"></div>
+        <div id="1" class="cell"></div>
+        <div id="2" class="cell"></div>
+        <div id="3" class="cell"></div>
+        <div id="4" class="cell"></div>
+        <div id="5" class="cell"></div>
+        <div id="6" class="cell"></div>
+        <div id="7" class="cell"></div>
+        <div id="8" class="cell"></div>
+        <div id="9" class="cell"></div>
+    </div>
 </body>
-
 </html>
